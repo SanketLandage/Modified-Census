@@ -4,6 +4,9 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +25,7 @@ import CensusProfiling.Mod.services.UserService;
 
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 public class UserController {
 	
 	public static final Logger LOG = LoggerFactory.getLogger(User.class);
@@ -35,9 +39,11 @@ public class UserController {
 	
 	////User Registration
 	@PostMapping("/registerUser")
-	public User userRegister(@RequestBody User user) {
+	public ResponseEntity<Object> userRegister(@RequestBody User user) {
 		LOG.info("User Register");
-			return service.userRegister(user);
+			service.userRegister(user);
+			return new ResponseEntity<>(
+			  HttpStatus.OK); 
 	}
 	
 	@PostMapping("/login")
@@ -53,30 +59,52 @@ public class UserController {
 		}
 		return null;
 	}
+	@PostMapping("/login2")
+	public ResponseEntity<User> login2(@RequestBody User appUser) {
+		LOG.info("Login");
+		LOG.info(appUser.getEmail());
+		LOG.info(appUser.getPassword());
+
+		User appUser2 = appUserService.login(appUser);
+		if ((appUser.getEmail().equals(appUser2.getEmail())
+				&& (appUser.getPassword().equals(appUser2.getPassword())))) {
+			return new ResponseEntity<>(
+				appUser2 , HttpStatus.OK
+			);
+		}
+		else {
+			return new ResponseEntity<>(
+					HttpStatus.BAD_REQUEST
+				);
+		}
+	}
+	
 	
 	@GetMapping("/logout")
 	public String logout() {
 		LOG.info("logoutController");
 		return appUserService.logout();
 	}
+	
 	////Add New Family Member
 	@PostMapping("/addmember")
-	public UserFamilyMember regMember(@RequestBody UserFamilyMember user) {
+	public ResponseEntity<UserFamilyMember> regMember(@RequestBody UserFamilyMember user) {
 		LOG.info("Member add");
 		if (appUserService.loginStatus().getRole().toString().equals("USER")) {
-			return service.addMember(user);
+			return new ResponseEntity<>( service.addMember(user) , HttpStatus.OK);
 		}
 		else {
-			throw new NoAccessException("You dont have access");
+		 	throw new NoAccessException("You dont have access");
 		}
 	}
 	
 	////Delete Family Member by Name
 	@DeleteMapping("/deleteMemberByFirstName/{name}")
-	public void deleteMember(@PathVariable(value = "name") String name) {
+	public int deleteMember(@PathVariable(value = "name") String name) {
 		LOG.info("Delete Family Member by First name");
 		if (appUserService.loginStatus().getRole().toString().equals("USER")) {
 			service.deleteMember(name);
+			return 1;
 		}else {
 			throw new NoAccessException("You dont have access");
 		}
@@ -122,10 +150,11 @@ public class UserController {
 		
 	////Delete Family Member BY ID
 		@DeleteMapping("/deleteMemberById/{mem_id}")
-		public void deleteMember(@PathVariable("mem_id") int mem_id) {
+		public int deleteMember(@PathVariable("mem_id") int mem_id) {
 			LOG.info("Delete Member Using ID");
 			if (appUserService.loginStatus().getRole().toString().equals("USER")) {
 				service.deleteMemberById(mem_id);
+				return 1;
 			}else {
 				throw new NoAccessException("You dont have access");
 			}

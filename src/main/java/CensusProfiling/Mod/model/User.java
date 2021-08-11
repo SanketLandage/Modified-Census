@@ -42,7 +42,7 @@ public class User {
 	@Column
 	private int numOfKids;
 
-	@Column(nullable = false)
+	@Column(nullable = false)  
 	private String city;
 	
 	@Column(nullable = false)

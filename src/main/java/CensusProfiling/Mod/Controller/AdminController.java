@@ -54,13 +54,13 @@ public static final Logger LOG = LoggerFactory.getLogger(User.class);
 	@GetMapping("/getAllUsers")
 	public List<User> getAllUsers() {
 		LOG.info("AllUsers");
-	//	if (appUserService.loginStatus().getRole().toString().equals("ADMIN")) {
+		if (appUserService.loginStatus().getRole().toString().equals("ADMIN")) {
 		return service.findAllUsers();
 		}
-//		else {
-//			throw new NoAccessException("You dont have access");
-	//	}
-	//}
+		else {
+			throw new NoAccessException("You dont have access");
+		}
+	}
 	
 	@GetMapping("/getAllFamilyMembers")
 	public List<UserFamilyMember> getAllFamilyMembers() {
