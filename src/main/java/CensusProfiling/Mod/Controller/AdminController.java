@@ -26,7 +26,7 @@ import CensusProfiling.Mod.services.AdminService;
 
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:3000")
 public class AdminController {
 	
 public static final Logger LOG = LoggerFactory.getLogger(User.class);
