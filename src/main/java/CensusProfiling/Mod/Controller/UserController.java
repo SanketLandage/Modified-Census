@@ -38,15 +38,21 @@ public class UserController {
 	SecureService appUserService;
 	
 	////User Registration
-	@CrossOrigin(origins = "http://localhost:3000")
-	@PostMapping("/registerUser")
-	public ResponseEntity<User> userRegister(@RequestBody User user) {
-		LOG.info("User Register");
-			service.userRegister(user);
-			return new ResponseEntity<>(
-			  user ,HttpStatus.OK); 
-	}
 	
+//	@PostMapping("/registerUser")
+//	public User userRegister(@RequestBody User user) {
+//		LOG.info("User Register");
+//		service.userRegister(user);
+//		return user;
+//	}
+	
+	@PostMapping("/registration")
+	public User userRegister(@RequestBody User user) {
+		LOG.info("User Register");
+		service.userRegister(user);
+		return user;
+	}
+
 	@PostMapping("/login")
 	public User login(@RequestBody User appUser) {
 		LOG.info("loginController");

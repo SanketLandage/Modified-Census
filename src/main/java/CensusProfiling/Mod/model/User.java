@@ -92,6 +92,21 @@ public class User {
 	
 	
 
+	public User(String firstName, String lastName, String gender, String email, String password, int numOfKids,
+			String city, String educationalQualification, int age, Role role) {
+		super();
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.gender = gender;
+		this.email = email;
+		this.password = password;
+		this.numOfKids = numOfKids;
+		this.city = city;
+		this.educationalQualification = educationalQualification;
+		this.age = age;
+		this.role = role;
+	}
+
 	public User(int uid, String firstName, String lastName, String gender, String email, String password, int numOfKids,
 			String city, String educationalQualification, int age, Role role, List<UserFamilyMember> usermMem) {
 		super();
